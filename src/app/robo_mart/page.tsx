@@ -1,14 +1,7 @@
 'use client'
-import React from 'react';
-import { Search, ShoppingCart, Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, ShoppingCart, Menu, User, Lock, Mail, Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
-import { Space_Grotesk } from 'next/font/google';
-
-const spaceGrotesk = Space_Grotesk({ 
-  subsets: ['latin'],
-  weight: ['700']
-});
-
 // Navbar Component
 const Navbar = () => {
   return (
@@ -16,16 +9,10 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <div className={`${spaceGrotesk.className} text-2xl font-bold bg-clip-text text-transparent 
-            bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 
-            hover:from-pink-600 hover:via-purple-500 hover:to-violet-500
-            drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]
-            hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.8)]
-            transform hover:scale-105
-            transition-all duration-300 cursor-pointer`}>
+          <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">
             RoboMart
           </div>
-        </div>
+        </div>  
 
         {/* Search Bar */}
         <div className="hidden md:flex flex-1 max-w-2xl mx-8">
@@ -64,13 +51,7 @@ const Navbar = () => {
 };
 
 // ProductCard Component
-interface ProductCardProps {
-  name: string;
-  price: number;
-  description: string;
-}
-
-const ProductCard = ({ name, price, description }: ProductCardProps) => {
+const ProductCard = ({ name, price, description }: { name: string; price: number; description: string }) => {
   return (
     <div className="group bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl p-6 
       hover:transform hover:scale-105 transition-all duration-300 
@@ -179,4 +160,342 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+// Login Page Component
+const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Handle login logic here
+    console.log('Login attempt:', formData);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center px-4">
+      <div className="max-w-md w-full space-y-8 p-8 bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl 
+        hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:border-purple-500/40 transition-all duration-300">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+            Welcome Back
+          </h2>
+          <p className="mt-2 text-gray-400">Log in to access your RoboMart account</p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Email</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 placeholder-gray-500"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                />
+                <Mail className="absolute left-3 top-2.5 text-purple-400" size={20} />
+              </div>
+            </div>
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 pr-10 placeholder-gray-500"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                />
+                <Lock className="absolute left-3 top-2.5 text-purple-400" size={20} />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-purple-400 hover:text-purple-300"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-purple-500/30 bg-gray-900/50 text-purple-500 focus:ring-purple-500/50"
+              />
+              <label className="ml-2 text-sm text-gray-400">Remember me</label>
+            </div>
+            <a href="#" className="text-sm text-purple-400 hover:text-purple-300">Forgot password?</a>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-500/20 border border-purple-500/50 text-purple-400 px-4 py-2 rounded-lg 
+              hover:bg-purple-500 hover:text-white transition-all duration-300
+              hover:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+          >
+            Sign In
+          </button>
+          <p className="text-center text-sm text-gray-400">
+            Don&apos;t have an account?{' '}
+            <a href="/signup" className="text-purple-400 hover:text-purple-300">Sign up</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// Sign Up Page Component
+const SignUpPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Handle sign up logic here
+    console.log('Sign up attempt:', formData);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center px-4">
+      <div className="max-w-md w-full space-y-8 p-8 bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl 
+        hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:border-purple-500/40 transition-all duration-300">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+            Create Account
+          </h2>
+          <p className="mt-2 text-gray-400">Join RoboMart and explore the future of robotics</p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Full Name</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 placeholder-gray-500"
+                  placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                />
+                <User className="absolute left-3 top-2.5 text-purple-400" size={20} />
+              </div>
+            </div>
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Email</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 placeholder-gray-500"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                />
+                <Mail className="absolute left-3 top-2.5 text-purple-400" size={20} />
+              </div>
+            </div>
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 pr-10 placeholder-gray-500"
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                />
+                <Lock className="absolute left-3 top-2.5 text-purple-400" size={20} />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-purple-400 hover:text-purple-300"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Confirm Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 pr-10 placeholder-gray-500"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                />
+                <Lock className="absolute left-3 top-2.5 text-purple-400" size={20} />
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              required
+              className="h-4 w-4 rounded border-purple-500/30 bg-gray-900/50 text-purple-500 focus:ring-purple-500/50"
+            />
+            <label className="ml-2 text-sm text-gray-400">
+              I agree to the{' '}
+              <a href="#" className="text-purple-400 hover:text-purple-300">Terms of Service</a>
+              {' '}and{' '}
+              <a href="#" className="text-purple-400 hover:text-purple-300">Privacy Policy</a>
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-500/20 border border-purple-500/50 text-purple-400 px-4 py-2 rounded-lg 
+              hover:bg-purple-500 hover:text-white transition-all duration-300
+              hover:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+          >
+            Create Account
+          </button>
+          <p className="text-center text-sm text-gray-400">
+            Already have an account?{' '}
+            <a href="/login" className="text-purple-400 hover:text-purple-300">Sign in</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const AuthPage = ({ children, title, subtitle }: { 
+  children: React.ReactNode;
+  title: string;
+  subtitle: string;
+}) => {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-b from-black via-gray-900 to-black">
+      <div className="max-w-md w-full space-y-8 p-8 bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl 
+        hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:border-purple-500/40 transition-all duration-300">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+            {title}
+          </h2>
+          <p className="mt-2 text-gray-400">{subtitle}</p>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const AuthContainer = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Login attempt:', formData);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-b from-black via-gray-900 to-black">
+      <div className="max-w-md w-full space-y-8 p-8 bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl 
+        hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:border-purple-500/40 transition-all duration-300">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+            Welcome Back
+          </h2>
+          <p className="mt-2 text-gray-400">Log in to access your RoboMart account</p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Email</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 placeholder-gray-500"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                />
+                <Mail className="absolute left-3 top-2.5 text-purple-400" size={20} />
+              </div>
+            </div>
+            <div className="relative">
+              <label className="text-purple-400 text-sm font-medium mb-1 block">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-purple-500/30 rounded-lg 
+                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 focus:outline-none
+                    pl-10 pr-10 placeholder-gray-500"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                />
+                <Lock className="absolute left-3 top-2.5 text-purple-400" size={20} />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-purple-400 hover:text-purple-300"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-purple-500/30 bg-gray-900/50 text-purple-500 focus:ring-purple-500/50"
+              />
+              <label className="ml-2 text-sm text-gray-400">Remember me</label>
+            </div>
+            <a href="#" className="text-sm text-purple-400 hover:text-purple-300">Forgot password?</a>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-500/20 border border-purple-500/50 text-purple-400 px-4 py-2 rounded-lg 
+              hover:bg-purple-500 hover:text-white transition-all duration-300
+              hover:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+          >
+            Sign In
+          </button>
+          <p className="text-center text-sm text-gray-400">
+            Don&apos;t have an account?{' '}
+            <a href="/signup" className="text-purple-400 hover:text-purple-300">Sign up</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export { Layout as default, LoginPage, SignUpPage, AuthPage, AuthContainer };
